@@ -12,7 +12,9 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 def plot_graph(avals_t,int_i,int_s):
     q_i = []
+    acum = 0
     for i in range(int_i,int_s):
+        acum += sum(list(map(int,list(filter(None, avals_t[i])))))
         q_i.append([avals_t[i].count('1'),avals_t[i].count('2'),avals_t[i].count('3'),avals_t[i].count('4'),avals_t[i].count('5')])
     q_i_t = [list(i) for i in zip(*q_i)]
     ind = np.arange(int_s - int_i)
@@ -23,9 +25,8 @@ def plot_graph(avals_t,int_i,int_s):
     rects3 = ax.bar(ind + 2*width, tuple(q_i_t[2]), width, color='g')
     rects4 = ax.bar(ind + 3*width, tuple(q_i_t[3]), width, color='b')
     rects5 = ax.bar(ind + 4*width, tuple(q_i_t[4]), width, color='m')
-
     ax.set_ylabel('Avaliações')
-    ax.set_title('Conceito e Número de Avaliações')
+    ax.set_title('Conceito e Número de Avaliações. Média {:04.2f}.'.format(acum/((int_s - int_i)*5)))
     ax.set_xticks(ind + width / (int_s - int_i))
     question_label = []
     for i in range(int_i,int_s):
@@ -149,23 +150,23 @@ def generate_pdf(n_alunos, n_respostas, avals, cod, prof):
             doc.append(NoEscape(perfil))
             plot_graph(avals_t,1,4)
             with doc.create(Figure(position='H')) as plot:
-                plot.add_plot(width=NoEscape(r'0.7\textwidth'))
+                plot.add_plot(width=NoEscape(r'0.5\textwidth'))
                 #plot.add_caption('')
         with doc.create(Subsection('Plano de Ensino')):
             doc.append(NoEscape(plano))
             plot_graph(avals_t,4,7)
             with doc.create(Figure(position='H')) as plot:
-                plot.add_plot(width=NoEscape(r'0.7\textwidth'))
+                plot.add_plot(width=NoEscape(r'0.5\textwidth'))
         with doc.create(Subsection('Metodologia de Ensino e Avaliação')):
             doc.append(NoEscape(metodologia))
             plot_graph(avals_t,7,12)
             with doc.create(Figure(position='H')) as plot:
-                plot.add_plot(width=NoEscape(r'0.7\textwidth'))
+                plot.add_plot(width=NoEscape(r'0.5\textwidth'))
         with doc.create(Subsection('Auto Avaliação')):
             doc.append(NoEscape(auto))
             plot_graph(avals_t,12,14)
             with doc.create(Figure(position='H')) as plot:
-                plot.add_plot(width=NoEscape(r'0.7\textwidth'))
+                plot.add_plot(width=NoEscape(r'0.5\textwidth'))
         with doc.create(Subsection('Críticas/Sugestões')):
             doc.append(NoEscape(sugestoes))
             for comentario in comments:
